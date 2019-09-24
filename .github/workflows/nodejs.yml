@@ -22,9 +22,9 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install
-        cp lib/HeatmapLayer.js lib/oldHeatmapLayer.js
+        cp "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js"
         npm run transpile
-        if [ ! $(cmp -s -- "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js") ]
+        if ! diff "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js"
         then
           echo "Library file is out of sync - please commit the updated HeatmapLayers.js"
           exit 1
