@@ -33,7 +33,7 @@
   "peerDependencies": {
     "leaflet": "^1.0.0",
     "react-leaflet": "^2.0.0",
-    "react": "^15.4.1 || ^16.0.0"
+    "react": "^16.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
