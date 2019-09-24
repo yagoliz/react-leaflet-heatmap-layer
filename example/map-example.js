@@ -20,6 +20,7 @@ export class MapExample extends React.Component {
     radius: 4,
     blur: 8,
     max: 0.5,
+    opacity: 1.0,
     limitAddressPoints: true,
   };
 
@@ -35,6 +36,15 @@ export class MapExample extends React.Component {
     }
   }
 
+  gradient = {
+      0.1: '#89BDE0', 0.2: '#96E3E6', 0.4: '#82CEB6',
+      0.6: '#FAF3A5', 0.8: '#F5D98B', '1.0': '#DE9A96'
+  };
+
+  latitudeExtractor  = point => point[0];
+  longitudeExtractor = point => point[1];
+  intensityExtractor = point => parseFloat(point[2]);
+
   render() {
     if (this.state.mapHidden) {
       return (
@@ -48,11 +58,6 @@ export class MapExample extends React.Component {
       );
     }
 
-    const gradient = {
-      0.1: '#89BDE0', 0.2: '#96E3E6', 0.4: '#82CEB6',
-      0.6: '#FAF3A5', 0.8: '#F5D98B', '1.0': '#DE9A96'
-    };
-
     return (
       <div>
         <Map center={[0, 0]} zoom={13}>
@@ -61,13 +66,14 @@ export class MapExample extends React.Component {
                 fitBoundsOnLoad
                 fitBoundsOnUpdate
                 points={this.state.addressPoints}
-                longitudeExtractor={m => m[1]}
-                latitudeExtractor={m => m[0]}
-                gradient={gradient}
-                intensityExtractor={m => parseFloat(m[2])}
+                longitudeExtractor={this.longitudeExtractor}
+                latitudeExtractor={this.latitudeExtractor}
+                gradient={this.gradient}
+                intensityExtractor={this.intensityExtractor}
                 radius={Number(this.state.radius)}
                 blur={Number(this.state.blur)}
                 max={Number.parseFloat(this.state.max)}
+                opacity={this.state.opacity}
               />
             }
           <TileLayer
@@ -123,6 +129,18 @@ export class MapExample extends React.Component {
             value={this.state.max}
             onChange={(e) => this.setState({ max: e.currentTarget.value })}
           /> {this.state.max}
+        </div>
+
+        <div>
+          Opacity
+          <input
+            type="range"
+            min={0.1}
+            max={1}
+            step={0.1}
+            value={this.state.opacity}
+            onChange={(e) => this.setState({ opacity: Number.parseFloat(e.currentTarget.value) })}
+          /> {this.state.opacity}
         </div>
       </div>
     );
