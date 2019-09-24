@@ -84,14 +84,14 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
-    "lodash.filter": "^4.3.0",
-    "lodash.foreach": "^4.2.0",
+    "lodash.filter": "^4.6.0",
+    "lodash.foreach": "^4.5.0",
     "lodash.isnumber": "^3.0.3",
-    "lodash.map": "^4.3.0",
-    "lodash.max": "^4.0.0",
-    "lodash.min": "^4.0.0",
+    "lodash.map": "^4.6.0",
+    "lodash.max": "^4.0.1",
+    "lodash.min": "^4.0.1",
     "lodash.pluck": "^3.1.2",
-    "lodash.reduce": "^4.3.0",
+    "lodash.reduce": "^4.6.0",
     "simpleheat": "^0.4.0"
   }
 }
