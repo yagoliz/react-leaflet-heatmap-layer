@@ -4,12 +4,12 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'source-map',
   entry: {
-    app: __dirname + '/index.js'
+    app: __dirname + '/index.jsx'
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -29,7 +29,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': '"development"'
+        NODE_ENV: '"development"'
       }
     }),
     new webpack.NoEmitOnErrorsPlugin(),
