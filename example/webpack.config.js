@@ -2,18 +2,22 @@
 var webpack = require('webpack');
 
 module.exports = {
-  debug: true,
   devtool: 'source-map',
   entry: {
     app: __dirname + '/index.js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel'
-      },
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
     ]
   },
   output: {
@@ -27,11 +31,10 @@ module.exports = {
         'NODE_ENV': '"development"'
       }
     }),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
-    colors: true,
     contentBase: __dirname,
     historyApiFallback: true,
     hot: true,

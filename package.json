@@ -59,10 +59,9 @@
     "@babel/preset-env": "^7.6.2",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
     "babel-jest": "^24.9.0",
-    "babel-loader": "7.1.1",
+    "babel-loader": "8.0.6",
     "babel-plugin-object-assign": "^1.2.1",
     "babel-plugin-react-transform": "^3.0.0",
     "babel-preset-minify": "^0.5.0",
@@ -80,8 +79,9 @@
     "react-hot-loader": "^4.12.13",
     "react-leaflet": "^2.0.0",
     "react-transform-hmr": "^1.0.4",
-    "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1"
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
     "lodash.filter": "^4.3.0",
