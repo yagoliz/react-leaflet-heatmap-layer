@@ -502,7 +502,11 @@ export default withLeaflet(class HeatmapLayer extends MapLayer {
       this.updateHeatmapMax(totalMax);
     }
 
-    this._heatmap.draw(this.getMinOpacity(this.props));
+    try {
+      this._heatmap.draw(this.getMinOpacity(this.props));
+    } catch (DOMException) {
+      // Safe to ignore - occurs if the width or height is 0
+    }
 
     this._frame = null;
 
