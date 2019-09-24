@@ -25,7 +25,7 @@ const AGG = {
   seen: 1
 };
 
-const getKey = (point) => `${point.coordinates[0]} - ${point.coordinates[1]}`;
+const getKey = point => `${point.coordinates[0]} - ${point.coordinates[1]}`;
 
 describe('computeAggregate', () => {
   describe('sum', () => {
@@ -37,7 +37,7 @@ describe('computeAggregate', () => {
     test('returns the intensity for each intensity when given multiple different points', () => {
       const aggregates = {};
 
-      POINTS.forEach((point) => {
+      POINTS.forEach(point => {
         const key = getKey(point);
 
         aggregates[key] = {
@@ -121,7 +121,7 @@ describe('computeAggregate', () => {
 
       const visited = [];
 
-      POINTS.forEach((point) => {
+      POINTS.forEach(point => {
         const key = getKey(point);
 
         if (!aggregates[key]) {
@@ -178,7 +178,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -222,7 +222,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -267,7 +267,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -311,7 +311,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -355,7 +355,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -407,7 +407,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -452,7 +452,7 @@ describe('computeAggregate', () => {
 
       const targetKey = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         const key = getKey(point);
 
         if (!aggregates[key]) {
@@ -506,7 +506,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -551,7 +551,7 @@ describe('computeAggregate', () => {
 
       const targetKey = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         const key = getKey(point);
 
         if (!aggregates[key]) {
@@ -605,7 +605,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -650,7 +650,7 @@ describe('computeAggregate', () => {
 
       const targetKey = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         const key = getKey(point);
 
         if (!aggregates[key]) {
@@ -704,7 +704,7 @@ describe('computeAggregate', () => {
 
       const key = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         if (!aggregates[key]) {
           aggregates[key] = {
             data: {},
@@ -749,7 +749,7 @@ describe('computeAggregate', () => {
 
       const targetKey = getKey(points[0]);
 
-      points.forEach((point) => {
+      points.forEach(point => {
         const key = getKey(point);
 
         if (!aggregates[key]) {

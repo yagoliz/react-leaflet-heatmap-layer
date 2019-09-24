@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "eslint-config-airbnb",
-    "plugin:flowtype/recommended"
-  ],
+  "extends": ["eslint-config-airbnb", "plugin:flowtype/recommended", "prettier"],
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -29,7 +26,7 @@
     "camelcase": 1,
 
     // used for creating new Immutable Lists and Maps
-    "new-cap": [1, {"capIsNewExceptions": ["Immutable"]}],
+    "new-cap": [1, { "capIsNewExceptions": ["Immutable"] }],
 
     // Sometimes short variable names are okay
     "id-length": 0,
@@ -62,11 +59,18 @@
       {
         "devDependencies": true
       }
-    ]
+    ],
+
+    // Left as-is since this is overkill
+    "class-methods-use-this": "off",
+
+    // Any prettier issues are now considered eslint issues
+    "prettier/prettier": ["error"],
+
+    // This is because we use `array` and `object`.
+    // `array` is ok because we require latitude, longitude and intensity extractors
+    // `object` is used with the gradient object, and proptypes can't encode the shape of a gradient correctly
+    "react/forbid-prop-types": "off"
   },
-  "plugins": [
-    "react",
-    "lean-imports",
-    "flowtype"
-  ]
+  "plugins": ["react", "lean-imports", "flowtype", "prettier"]
 }

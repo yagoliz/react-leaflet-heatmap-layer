@@ -2,11 +2,10 @@ name: Node CI
 on:
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -14,21 +13,22 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm install
-        cp "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js"
-        npm run transpile
-        if ! diff "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js"
-        then
-          echo "Library file is out of sync - please commit the updated HeatmapLayers.js"
-          exit 1
-        fi
-        npm test
-      env:
-        CI: true
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run lint
+          cp "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js"
+          npm run transpile
+          if ! diff "lib/HeatmapLayer.js" "lib/oldHeatmapLayer.js"
+          then
+            echo "Library file is out of sync - please commit the updated HeatmapLayers.js"
+            exit 1
+          fi
+          npm test
+        env:
+          CI: true

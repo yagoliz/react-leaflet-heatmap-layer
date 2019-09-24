@@ -1,6 +1,6 @@
 {
   "name": "react-leaflet-heatmap-layer",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "A custom layer for heatmaps in react-leaflet",
   "main": "lib/HeatmapLayer.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "example": "webpack-dev-server --config ./example/webpack.config.js",
-    "lint": "eslint ./src ./example/index.js"
+    "lint": "eslint ./src ./example/index.jsx"
   },
   "repository": {
     "type": "git",
@@ -67,14 +67,17 @@
     "babel-preset-minify": "^0.5.0",
     "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-arrow-function": "^2.0.0",
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-lean-imports": "^0.3.3",
+    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.14.3",
     "jest": "^24.9.0",
     "leaflet": "^1.0.0",
+    "prettier": "^1.18.2",
     "prop-types": "^15.6.2",
     "react": "^16.9.0",
     "react-dom": "^16.0.0",
