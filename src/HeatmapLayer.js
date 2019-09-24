@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 import map from 'lodash.map';
 import reduce from 'lodash.reduce';
 import filter from 'lodash.filter';
@@ -268,25 +269,6 @@ export default withLeaflet(class HeatmapLayer extends MapLayer {
     };
   }
 
-  componentWillReceiveProps(nextProps: Object): void {
-    const currentProps = this.props;
-    const nextHeatmapProps = this.getHeatmapProps(nextProps);
-
-    this.updateHeatmapGradient(nextHeatmapProps.gradient);
-
-    const hasRadiusUpdated = nextHeatmapProps.radius !== currentProps.radius;
-    const hasBlurUpdated = nextHeatmapProps.blur !== currentProps.blur;
-
-    if (hasRadiusUpdated || hasBlurUpdated) {
-      this.updateHeatmapRadius(nextHeatmapProps.radius, nextHeatmapProps.blur);
-    }
-
-    if (nextHeatmapProps.max !== currentProps.max) {
-      this.updateHeatmapMax(nextHeatmapProps.max);
-    }
-
-  }
-
   /**
    * Update various heatmap properties like radius, gradient, and max
    */
@@ -348,18 +330,36 @@ export default withLeaflet(class HeatmapLayer extends MapLayer {
     leaflet.map.fitBounds(L.latLngBounds(L.latLng(sw), L.latLng(ne)));
   }
 
-  componentDidUpdate(): void {
+  componentDidUpdate(prevProps): void {
     this.props.leaflet.map.invalidateSize();
 
     if (this.props.fitBoundsOnUpdate) {
       this.fitBounds();
     }
 
+    const nextProps = this.props;
+    const nextHeatmapProps = this.getHeatmapProps(nextProps);
+
+    if (nextHeatmapProps.gradient != prevProps.gradient) {
+      this.updateHeatmapGradient(nextHeatmapProps.gradient);
+    }
+
+    const hasRadiusUpdated = nextHeatmapProps.radius !== prevProps.radius;
+    const hasBlurUpdated = nextHeatmapProps.blur !== prevProps.blur;
+
+    if (hasRadiusUpdated || hasBlurUpdated) {
+      this.updateHeatmapRadius(nextHeatmapProps.radius, nextHeatmapProps.blur);
+    }
+
+    if (nextHeatmapProps.max !== prevProps.max) {
+      this.updateHeatmapMax(nextHeatmapProps.max);
+    }
+
     this.reset();
   }
 
-  shouldComponentUpdate(): boolean {
-    return true;
+  shouldComponentUpdate(nextProps, nextState): boolean {
+    return shallowCompare(this, nextProps, nextState);
   }
 
   attachEvents(): void {
