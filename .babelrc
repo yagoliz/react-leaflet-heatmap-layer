@@ -10,7 +10,6 @@
     "@babel/preset-flow"
   ],
   "plugins": [
-    "react-hot-loader/babel",
     "@babel/plugin-proposal-do-expressions",
     "@babel/plugin-proposal-function-bind",
     [
