@@ -1,15 +1,11 @@
-import Heatmap from './Heatmap'
-export { Heatmap }
-export {
-  SimpleHeat,
+export { default as Heatmap, SimpleHeat, computeAggregate } from './Heatmap'
+export type {
+  HeatmapOptions,
+  Aggregation,
   Gradient,
   AggregateType,
-  Aggregation,
-  HeatmapOptions,
-  HeatmapProps,
-  computeAggregate,
+  SimpleHeatOptions,
 } from './Heatmap'
 
-import HeatmapLayer from './HeatmapLayer'
-export { HeatmapLayer }
-export { useHeatmapLayer } from './HeatmapLayer'
+export { default as HeatmapLayer } from './HeatmapLayer'
+export type { HeatmapLayerProps } from './HeatmapLayer'

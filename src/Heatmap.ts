@@ -127,7 +127,17 @@ export function computeAggregate(
   return agg.data[type]
 }
 
-export interface HeatmapOptions<Point> extends L.LayerOptions {
+export interface SimpleHeatOptions {
+  opacity: number
+  minOpacity: number
+  maxZoom: number
+  radius: number
+  blur: number
+  max: number
+  gradient?: Gradient
+}
+
+export interface HeatmapOptions<Point> extends L.LayerOptions, Partial<SimpleHeatOptions> {
   points: Point[]
   longitudeExtractor: (point: Point) => number
   latitudeExtractor: (point: Point) => number
@@ -136,52 +146,37 @@ export interface HeatmapOptions<Point> extends L.LayerOptions {
   fitBoundsOnUpdate?: boolean
   onStatsUpdate?: (stats: { min: number; max: number }) => void
 
-  /* props controlling heatmap generation */
-  max?: number
-  radius?: number
-  maxZoom?: number
-  opacity?: number
-  minOpacity?: number
   useLocalExtrema?: boolean
-  blur?: number
-  gradient?: Gradient
-  aggregateType?:
-    | 'mean'
-    | 'count'
-    | 'sum'
-    | 'distinct'
-    | 'min'
-    | 'max'
-    | 'variance'
-    | 'variancep'
-    | 'stdev'
-    | 'stdevp'
+  aggregateType?: AggregateType
 }
 
 type Cell = [number, number, number]
 
-export interface HeatmapProps {
-  opacity: number
-  minOpacity: number
-  maxZoom: number
-  radius?: number
-  blur: number
-  max: number
-  gradient?: Gradient
-}
-
 export default class Heatmap<Point> extends L.Layer {
-  private _el: HTMLCanvasElement
-  private _heatmap: SimpleHeat
+  private __el?: HTMLCanvasElement
+  private __heatmap?: SimpleHeat
   private _frame?: number | null
   options: HeatmapOptions<Point>
 
   constructor(options?: HeatmapOptions<Point>) {
     super(options)
     this.options = L.Util.setOptions(this, options)
+  }
 
-    this._el = document.createElement('canvas')
-    this._heatmap = new SimpleHeat(this._el)
+  private get _heatmap() {
+    if (!this.__heatmap) {
+      this.__el = document.createElement('canvas')
+      this.__heatmap = new SimpleHeat(this.__el)
+    }
+    return this.__heatmap
+  }
+
+  private get _el() {
+    if (!this.__el) {
+      this.__el = document.createElement('canvas')
+      this.__heatmap = new SimpleHeat(this.__el)
+    }
+    return this.__el
   }
 
   getPane(): HTMLElement {
@@ -197,6 +192,7 @@ export default class Heatmap<Point> extends L.Layer {
     this._el.style.transformOrigin = '50% 50%'
     this._el.width = mapSize.x
     this._el.height = mapSize.y
+    this._heatmap.resize()
 
     this.getPane().appendChild(this._el)
 
@@ -206,7 +202,7 @@ export default class Heatmap<Point> extends L.Layer {
       this.fitBounds()
     }
 
-    this.updateHeatmapProps(this.getHeatmapProps())
+    this.updateSimpleHeat(this.getSimpleHeatOptions())
 
     return this
   }
@@ -289,7 +285,7 @@ export default class Heatmap<Point> extends L.Layer {
     return this.options.blur ?? 15
   }
 
-  getHeatmapProps(): HeatmapProps {
+  getSimpleHeatOptions(): SimpleHeatOptions {
     return {
       opacity: this.getOpacity(),
       minOpacity: this.getMinOpacity(),
@@ -304,10 +300,10 @@ export default class Heatmap<Point> extends L.Layer {
   /**
    * Update various heatmap properties like radius, gradient, and max
    */
-  updateHeatmapProps(props: HeatmapProps): void {
-    this.updateHeatmapRadius(props.radius, props.blur)
-    this.updateHeatmapGradient(props.gradient)
-    this.updateHeatmapMax(props.max)
+  updateSimpleHeat(options: Partial<SimpleHeatOptions>): void {
+    this.updateHeatmapRadius(options.radius, options.blur)
+    this.updateHeatmapGradient(options.gradient)
+    this.updateHeatmapMax(options.max)
   }
 
   /**
@@ -350,12 +346,12 @@ export default class Heatmap<Point> extends L.Layer {
     const getIntensity = this.options.intensityExtractor
     const inBounds = (p: L.PointExpression, bounds: L.Bounds) => bounds.contains(p)
 
-    const filterUndefined = (row: Cell[]) => row.filter(c => c !== undefined)
+    const filterUndefined = (row: Cell[]) => row.filter((c) => c !== undefined)
     const roundResults = (results: Cell[][]) =>
       results.reduce(
         (result, row) =>
           filterUndefined(row)
-            .map(cell => [Math.round(cell[0]), Math.round(cell[1]), cell[2]] as Cell)
+            .map((cell) => [Math.round(cell[0]), Math.round(cell[1]), cell[2]] as Cell)
             .concat(result),
         [],
       )
@@ -420,7 +416,7 @@ export default class Heatmap<Point> extends L.Layer {
 
     const data = getDataForHeatmap(this.options.points, this._map, this.options.aggregateType)
 
-    const totalMax = max(data.map(m => m[2]))
+    const totalMax = max(data.map((m) => m[2]))
 
     this._heatmap.clear()
     this._heatmap.data(data)
@@ -438,7 +434,7 @@ export default class Heatmap<Point> extends L.Layer {
     this._frame = null
     if (this.options.onStatsUpdate && this.options.points && this.options.points.length > 0) {
       this.options.onStatsUpdate({
-        min: min(data.map(m => m[2])),
+        min: min(data.map((m) => m[2])),
         max: totalMax,
       })
     }

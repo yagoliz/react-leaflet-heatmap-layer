@@ -1,52 +1,50 @@
-import { useImperativeHandle, forwardRef, Ref } from 'react'
-import { createLayerHook, createElementHook, LeafletContextInterface } from '@react-leaflet/core'
+import * as L from 'leaflet'
+import { createLayerComponent } from '@react-leaflet/core'
 
 import Heatmap, { HeatmapOptions } from './Heatmap'
 
-function createLeafletHeatmap<Point>(
-  props: HeatmapOptions<Point>,
-  context: LeafletContextInterface,
-) {
-  return { instance: new Heatmap(props), context }
-}
+export type HeatmapLayerProps<Point> = HeatmapOptions<Point>
 
-function updateLeafletHeatmap<Point>(
-  instance: Heatmap<Point>,
-  props: HeatmapOptions<Point>,
-  prevProps: HeatmapOptions<Point>,
-) {
-  if (props.fitBoundsOnUpdate) {
-    instance.fitBounds()
-  }
+const HeatmapLayer = (<Point>() =>
+  createLayerComponent<Heatmap<Point>, HeatmapLayerProps<Point>>(
+    function createHeatmapLayer(props, context) {
+      const instance = new Heatmap(props)
+      return { instance, context }
+    },
+    function updateHeatmapLayer(
+      instance,
+      {
+        opacity,
+        minOpacity,
+        maxZoom,
+        radius,
+        blur,
+        max,
+        gradient,
+        latitudeExtractor,
+        longitudeExtractor,
+        intensityExtractor,
+        points,
+        aggregateType,
+        useLocalExtrema = true,
+      },
+    ) {
+      // if (props.fitBoundsOnUpdate) {
+      //   instance.fitBounds()
+      // }
+      instance.updateSimpleHeat({ opacity, minOpacity, maxZoom, radius, blur, max, gradient })
 
-  if (props.gradient !== prevProps.gradient) {
-    instance.updateHeatmapGradient(props.gradient)
-  }
+      L.Util.setOptions(instance, {
+        latitudeExtractor,
+        longitudeExtractor,
+        intensityExtractor,
+        points,
+        aggregateType,
+        useLocalExtrema,
+      })
 
-  const hasRadiusUpdated = props.radius !== prevProps.radius
-  const hasBlurUpdated = props.blur !== prevProps.blur
+      instance.reset()
+    },
+  ))()
 
-  if (hasRadiusUpdated || hasBlurUpdated) {
-    instance.updateHeatmapRadius(props.radius, props.blur)
-  }
-
-  if (props.max !== prevProps.max) {
-    instance.updateHeatmapMax(props.max)
-  }
-
-  instance.reset()
-}
-
-const useLeafletHeatmapElement = createElementHook(createLeafletHeatmap, updateLeafletHeatmap)
-export const useHeatmapLayer = createLayerHook(useLeafletHeatmapElement)
-
-function _LeafletHeatmap<Point>(props: HeatmapOptions<Point>, ref: Ref<Heatmap<Point>>) {
-  const { instance } = useHeatmapLayer(props).current
-  useImperativeHandle(ref, () => instance)
-
-  return null
-}
-
-const LeafletHeatmap = forwardRef(_LeafletHeatmap)
-
-export default LeafletHeatmap
+export default HeatmapLayer
