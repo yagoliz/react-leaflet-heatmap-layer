@@ -253,6 +253,10 @@ export default class Heatmap<Point> extends L.Layer {
   }
 
   resize(): void {
+    if (!this._map) {
+      return
+    }
+
     const size = this._map.getSize()
     if (size.x !== this._el.width || size.y !== this._el.height) {
       this._el.width = size.x
@@ -334,6 +338,10 @@ export default class Heatmap<Point> extends L.Layer {
   }
 
   redraw(): void {
+    if (!this._map) {
+      return
+    }
+
     const r = this._heatmap._r
     const size = this._map.getSize()
     const cellSize = r / 2
@@ -443,6 +451,10 @@ export default class Heatmap<Point> extends L.Layer {
   }
 
   reset(): void {
+    if (!this._map) {
+      return
+    }
+
     const topLeft = this._map.containerPointToLayerPoint([0, 0])
     L.DomUtil.setPosition(this._el, topLeft)
 
